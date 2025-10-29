@@ -32,3 +32,9 @@ export const updateProjectSchema = z.object({
 export const projectIdSchema = z.object({
   id: z.string().uuid('Invalid project ID format'),
 });
+
+export const createSubscriptionSchema = z.object({
+  planId: z.enum(['FREE', 'PRO'], {
+    message: 'Invalid plan ID',
+  }),
+});
