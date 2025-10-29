@@ -1,0 +1,70 @@
+// ---------------------------------------------------------
+//  Prisma Schema — Talavera Subscriptions (Backend)
+// ---------------------------------------------------------
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ---------------------------------------------------------
+//  MODEL — Invoice
+// ---------------------------------------------------------
+
+model Invoice {
+  id             String     @id @default(uuid())
+  userId         String     @map("user_id")
+  plan           PlanType
+  paymentIntent  String     @map("payment_intent")
+  status         String     @default("paid")
+  createdAt      DateTime   @default(now()) @map("created_at")
+
+  user           User       @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------
+//  MODEL — Project
+// ---------------------------------------------------------
+
+model Project {
+  id         String   @id @default(uuid())
+  name       String   @db.VarChar(100)
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  createdAt  DateTime @default(now())  @map("created_at")
+  updatedAt  DateTime @updatedAt       @map("updated_at")
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------
+//  MODEL — User
+// ---------------------------------------------------------
+
+model User {
+  id             String      @id @default(uuid())
+  email          String      @unique @db.VarChar(255)
+  passwordHash   String      @map("password_hash")
+  plan           PlanType    @default(FREE)
+  projects       Project[]
+  invoices       Invoice[]
+  createdAt      DateTime    @default(now())  @map("created_at")
+  updatedAt      DateTime    @updatedAt       @map("updated_at")
+
+  @@index([email])
+}
+
+// ---------------------------------------------------------
+//  ENUM — Subscription Plan Types
+// ---------------------------------------------------------
+
+enum PlanType {
+  FREE
+  PRO
+}
