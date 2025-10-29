@@ -10,6 +10,8 @@ import {
   uncaughtExceptionLogger,
   configWinstonLogger,
 } from './config/winston.config';
+import { corsConfig } from './config/cors.config';
+import { helmetConfig, helmetDevConfig } from './config/helmet.config';
 import { ErrorConverter, ErrorHandler } from "../utils/errors";
 
 export class App {
@@ -28,8 +30,11 @@ export class App {
 
   private setMiddlewares(): void {
     this.app.use(express.json());
-    this.app.use(helmet());
-    this.app.use(cors());
+    
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    this.app.use(helmet(isDevelopment ? helmetDevConfig : helmetConfig));
+    this.app.use(cors(corsConfig));
+    
     this.app.use(responseMiddleware);
     winston.debug('Middlewares configured ...');
   }

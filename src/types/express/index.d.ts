@@ -4,8 +4,14 @@ declare global {
       interface Response {
         respond: (data: any, status: number) => void;
       }
-  
+      
+      interface Request {
+        user?: {
+          id: string;
+          email: string;
+        };
+      }
     }
 }
   
-  export {};
+export {};

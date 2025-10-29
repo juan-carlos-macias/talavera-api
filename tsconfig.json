@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "strict": true,
     "moduleResolution": "node",
-    "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "typeRoots": ["src/types", "./node_modules/@types"],
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "baseUrl": ".",
@@ -15,5 +15,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "src/@types", "vitest.config.ts"]
+  "include": ["src", "src/types", "vitest.config.ts"]
 }
