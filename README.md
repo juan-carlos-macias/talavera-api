@@ -14,7 +14,7 @@ Backend API for the Talavera subscription system, developed with TDD/BDD approac
 - ✅ **Docker Compose**: PostgreSQL configured with environment variables
 - ✅ **Test Framework**: Vitest configured and working
 - ✅ **NPM Scripts**: 
-  - `npm run test` - Run tests (currently 10 failing tests ✓)
+  - `npm run test` - Run tests
   - `npm run lint` - ESLint linter
   - `npm run format` - Prettier formatter
   - `npm run dev` - Development server
@@ -50,7 +50,6 @@ Tests cover:
 - ✅ Protected routes (GET /api/users/me)
 - ✅ Complete Projects CRUD (owner-scoped)
 - ✅ Project quota (FREE plan: max 3 projects)
-- ✅ i18n baseline (EN/ES) for 10-20 strings
 - ✅ Zod validation for all endpoints
 
 **Tests:** ✅ 10/10 tests passing
@@ -70,6 +69,48 @@ Tests cover:
 - `DELETE /api/projects/:id` - Delete project
 
 **Success Criteria:** ✅ All Tier 1 tests passed (green).
+
+---
+
+### ✅ Tier 2 — Subscriptions & Payment Integration (COMPLETED)
+
+**Goal:** Implement subscription management with payment processing (Stripe mock).
+
+#### Implementation completed:
+
+- ✅ **Plans Management**: GET /api/plans endpoint
+- ✅ **Subscription Creation**: POST /api/subscriptions (PRO plan only)
+- ✅ **Current Subscription**: GET /api/subscriptions/current (protected)
+- ✅ **Stripe Mock Integration**: Simulated payment processing with mock payment intents
+- ✅ **Invoice Generation**: Automatic invoice creation on subscription
+- ✅ **PRO Plan Quota**: 10 projects quota enforcement
+- ✅ **Quota Upgrade Flow**: FREE → PRO upgrade increases quota from 3 to 10
+- ✅ **Validation**: Cannot create FREE plan subscriptions, duplicate subscriptions blocked
+- ✅ **Database Schema**: Invoice model with payment tracking
+
+**Tests:** ✅ 20/20 tests passing (Tier 1: 10, Tier 2: 10)
+
+**Implemented Routes:**
+
+**Plans (public):**
+- `GET /api/plans` - List available plans with i18n support (?locale=en|es)
+  - FREE plan: $0/month, 3 projects
+  - PRO plan: $9.99/month, 10 projects
+
+**Subscriptions (all protected):**
+- `POST /api/subscriptions` - Create PRO subscription with payment processing
+- `GET /api/subscriptions/current` - Get user's current subscription details
+
+**Features:**
+- ✨ **Payment Mock**: Stripe payment intent simulation (`pi_mock_*` format)
+- ✨ **Automatic Upgrades**: Quota automatically increases on PRO subscription
+- ✨ **Status Tracking**: Invoice status (paid, pending, failed)
+- ✨ **Business Rules**: 
+  - Cannot subscribe to FREE plan (it's default)
+  - Cannot create duplicate active subscriptions
+  - Project creation respects current plan quota
+
+**Success Criteria:** ✅ All Tier 2 tests passed (green).
 
 ---
 
@@ -421,5 +462,3 @@ npm run db:generate
 ```
 
 ---
-
-**Last Update:** Tier 1 completed - October 2025

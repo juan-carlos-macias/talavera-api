@@ -196,20 +196,10 @@ This document tracks how AI was used throughout the development of the Talavera 
    - **Reasoning:** Better TypeScript support, type-safe queries, easier migrations
    - **Trade-off:** Less control over raw SQL, but acceptable for this use case
 
-2. **Vitest vs Jest**
-   - **Decision:** Vitest
-   - **Reasoning:** Faster, better ESM support, modern testing framework
-   - **Trade-off:** Smaller ecosystem than Jest, but growing rapidly
-
-3. **Class-based vs Functional Services**
+2. **Class-based vs Functional Services**
    - **Decision:** Class-based (e.g., AuthService, Validations)
    - **Reasoning:** Better encapsulation, easier to test, cleaner code organization
    - **Trade-off:** Slightly more verbose, but worth it for maintainability
-
-4. **Zod vs Joi**
-   - **Decision:** Zod
-   - **Reasoning:** TypeScript-first, better type inference, smaller bundle
-   - **Trade-off:** None significant
 
 ---
 
