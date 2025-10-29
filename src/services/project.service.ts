@@ -1,17 +1,17 @@
-import { PrismaClient, Project, PlanType } from '@prisma/client';
+import { Project } from '@prisma/client';
 import { ApiError } from '../utils/errors';
 import httpStatus from 'http-status';
-import { CreateProjectData, FREE_PLAN_PROJECT_LIMIT, UpdateProjectData } from '../types/project/project.types';
+import { CreateProjectData, UpdateProjectData } from '../types/project/project.types';
+import { PLAN_QUOTAS } from '../constants/plans.constants';
+import prisma from '../lib/prisma';
 
 
 export class ProjectService {
 
-  private readonly prisma: PrismaClient = new PrismaClient();
-
   async createProject(data: CreateProjectData): Promise<Project> {
     const { name, userId } = data;
 
-    const user = await this.prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: userId },
       include: { projects: true },
     });
@@ -20,16 +20,16 @@ export class ProjectService {
       throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
     }
 
-    if (user.plan === PlanType.FREE) {
-      if (user.projects.length >= FREE_PLAN_PROJECT_LIMIT) {
-        throw new ApiError(
-          httpStatus.FORBIDDEN,
-          `Free plan allows maximum ${FREE_PLAN_PROJECT_LIMIT} projects. Please upgrade to PRO plan.`
-        );
-      }
+    const projectQuota = PLAN_QUOTAS[user.plan];
+    
+    if (user.projects.length >= projectQuota) {
+      throw new ApiError(
+        httpStatus.FORBIDDEN,
+        `${user.plan} plan allows maximum ${projectQuota} projects. Please upgrade to PRO plan.`
+      );
     }
 
-    const project = await this.prisma.project.create({
+    const project = await prisma.project.create({
       data: {
         name,
         userId,
@@ -40,7 +40,7 @@ export class ProjectService {
   }
 
   async getProjectsByUserId(userId: string): Promise<Project[]> {
-    const projects = await this.prisma.project.findMany({
+    const projects = await prisma.project.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
@@ -49,7 +49,7 @@ export class ProjectService {
   }
 
   async getProjectById(projectId: string, userId: string): Promise<Project> {
-    const project = await this.prisma.project.findUnique({
+    const project = await prisma.project.findUnique({
       where: { id: projectId },
     });
 
@@ -71,7 +71,7 @@ export class ProjectService {
   ): Promise<Project> {
     await this.getProjectById(projectId, userId);
 
-    const project = await this.prisma.project.update({
+    const project = await prisma.project.update({
       where: { id: projectId },
       data: { name: data.name },
     });
@@ -82,13 +82,13 @@ export class ProjectService {
   async deleteProject(projectId: string, userId: string): Promise<void> {
     await this.getProjectById(projectId, userId);
 
-    await this.prisma.project.delete({
+    await prisma.project.delete({
       where: { id: projectId },
     });
   }
 
   async getProjectCount(userId: string): Promise<number> {
-    return await this.prisma.project.count({
+    return await prisma.project.count({
       where: { userId },
     });
   }

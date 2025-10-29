@@ -1,12 +1,12 @@
-import { PrismaClient, User } from '@prisma/client';
+import { User } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { ApiError } from '../utils/errors';
 import httpStatus from 'http-status';
 import { SignupData, SigninData, TokenPayload, SALT_ROUNDS } from '../types/auth/auth.types';
+import prisma from '../lib/prisma';
 
 export class AuthService {
-  private readonly prisma: PrismaClient = new PrismaClient();
   private readonly JWT_SECRET: string;
   private readonly JWT_EXPIRES_IN: string;
 
@@ -18,7 +18,7 @@ export class AuthService {
   async signup(data: SignupData): Promise<{ user: Omit<User, 'passwordHash'>; token: string }> {
     const { email, password } = data;
 
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -28,7 +28,7 @@ export class AuthService {
 
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
 
-    const user = await this.prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         email,
         passwordHash,
@@ -53,7 +53,7 @@ export class AuthService {
   async signin(data: SigninData): Promise<{ user: Omit<User, 'passwordHash'>; token: string }> {
     const { email, password } = data;
 
-    const user = await this.prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email },
     });
 
@@ -69,7 +69,7 @@ export class AuthService {
 
     const token = this.generateToken({ id: user.id, email: user.email });
 
-    const userWithoutPassword = await this.prisma.user.findUnique({
+    const userWithoutPassword = await prisma.user.findUnique({
       where: { id: user.id },
       select: {
         id: true,
@@ -101,7 +101,7 @@ export class AuthService {
   }
 
   async getUserById(userId: string): Promise<Omit<User, 'passwordHash'> | null> {
-    const user = await this.prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: userId },
       select: {
         id: true,
