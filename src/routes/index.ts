@@ -4,6 +4,7 @@ import { ApiError } from '../utils/errors';
 import authRoutes from './auth.routes';
 import projectRoutes from './project.routes';
 import subscriptionRoutes from './subscription.routes';
+import audioRoutes from './audio.routes';
 
 export default class Routes {
     public app: Application;
@@ -30,6 +31,7 @@ export default class Routes {
         this.app.use('/api/users', authRoutes.router);
         this.app.use('/api/projects', projectRoutes.router);
         this.app.use('/api', subscriptionRoutes.router);
+        this.app.use('/api/audio', audioRoutes.router);
 
         this.app.use((req, res, next) => {
             next(new ApiError(httpStatus.NOT_FOUND, 'Route Not found'));

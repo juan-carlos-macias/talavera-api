@@ -44,18 +44,38 @@ model Project {
 }
 
 // ---------------------------------------------------------
+//  MODEL — AudioSummary
+// ---------------------------------------------------------
+
+model AudioSummary {
+  id          String   @id @default(uuid())
+  ownerId     String   @map("owner_id")
+  title       String   @db.VarChar(255)
+  keywords    String[]
+  transcript  String   @db.Text
+  summary     String   @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  owner       User     @relation(fields: [ownerId], references: [id])
+
+  @@index([ownerId])
+}
+
+// ---------------------------------------------------------
 //  MODEL — User
 // ---------------------------------------------------------
 
 model User {
-  id             String      @id @default(uuid())
-  email          String      @unique @db.VarChar(255)
-  passwordHash   String      @map("password_hash")
-  plan           PlanType    @default(FREE)
+  id             String         @id @default(uuid())
+  email          String         @unique @db.VarChar(255)
+  passwordHash   String         @map("password_hash")
+  plan           PlanType       @default(FREE)
   projects       Project[]
   invoices       Invoice[]
-  createdAt      DateTime    @default(now())  @map("created_at")
-  updatedAt      DateTime    @updatedAt       @map("updated_at")
+  audioSummaries AudioSummary[]
+  createdAt      DateTime       @default(now())  @map("created_at")
+  updatedAt      DateTime       @updatedAt       @map("updated_at")
 
   @@index([email])
 }

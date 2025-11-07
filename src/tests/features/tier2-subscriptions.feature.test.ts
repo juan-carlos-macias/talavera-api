@@ -5,7 +5,6 @@ import { App } from '@/app';
 const app = new App().app;
 
 let authToken: string;
-let userId: string;
 
 describe('Feature: Subscription Management (Tier 2)', () => {
   beforeEach(async () => {
