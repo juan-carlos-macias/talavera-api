@@ -29,3 +29,14 @@ export interface AudioSummaryResponse {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface AudioAnalysisContext {
+  audioBuffer: Buffer;
+  filename: string;
+  userId: string;
+}
+
+export interface TranscriptionContext {
+  audioBuffer: Buffer;
+  filename: string;
+}

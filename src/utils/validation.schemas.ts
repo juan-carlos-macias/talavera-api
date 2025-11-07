@@ -43,7 +43,6 @@ export const audioSummaryIdSchema = z.object({
   id: z.string().uuid('Invalid audio summary ID format'),
 });
 
-// Audio Analysis Schema for OpenAI Agent output
 export const audioAnalysisSchema = z.object({
   title: z.string().describe('A descriptive title for the audio content'),
   keywords: z
@@ -51,4 +50,16 @@ export const audioAnalysisSchema = z.object({
     .describe('Key topics and themes discussed in the audio'),
   transcript: z.string().describe('Full transcription of the audio'),
   summary: z.string().describe('Comprehensive summary of the audio content'),
+});
+
+export const AudioAnalysisOutput = z.object({
+  title: z.string().describe('A clear, descriptive title for the audio content (max 100 characters)'),
+  keywords: z.array(z.string()).describe('5-10 key topics and themes as keywords (single words or short phrases)'),
+  transcript: z.string().describe('The full original transcript of the audio'),
+  summary: z.string().describe('A comprehensive summary (3-5 sentences capturing main points)'),
+});
+
+export const TranscriptionOutput = z.object({
+  transcript: z.string().describe('The transcribed text from the audio file'),
+  filename: z.string().describe('The name of the transcribed audio file'),
 });
