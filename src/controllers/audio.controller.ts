@@ -16,14 +16,12 @@ class AudioController {
       return;
     }
 
-    // Analyze the audio using OpenAI Agent with context
     const analysis = await audioService.analyzeAudio(
-      req.file.buffer,
-      req.file.originalname,
+      req!.file.buffer,
+      req!.file.originalname,
       userId,
     );
 
-    // Save the analysis to database
     const audioSummary = await audioService.createAudioSummary({
       ownerId: userId,
       title: analysis.title,
