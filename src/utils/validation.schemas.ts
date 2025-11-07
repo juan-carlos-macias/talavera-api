@@ -38,3 +38,17 @@ export const createSubscriptionSchema = z.object({
     message: 'Invalid plan ID',
   }),
 });
+
+export const audioSummaryIdSchema = z.object({
+  id: z.string().uuid('Invalid audio summary ID format'),
+});
+
+// Audio Analysis Schema for OpenAI Agent output
+export const audioAnalysisSchema = z.object({
+  title: z.string().describe('A descriptive title for the audio content'),
+  keywords: z
+    .array(z.string())
+    .describe('Key topics and themes discussed in the audio'),
+  transcript: z.string().describe('Full transcription of the audio'),
+  summary: z.string().describe('Comprehensive summary of the audio content'),
+});

@@ -90,6 +90,41 @@ Tests cover:
 
 **Tests:** ✅ 20/20 tests passing (Tier 1: 10, Tier 2: 10)
 
+---
+
+### ✅ Audio Transcription & Analysis (COMPLETED)
+
+**Goal:** Implement AI-powered audio transcription and summarization using OpenAI agents.
+
+#### Implementation completed:
+
+- ✅ **Audio Upload**: POST /api/audio/analyze endpoint with multipart/form-data
+- ✅ **Whisper Integration**: Automatic transcription using OpenAI Whisper API
+- ✅ **GPT-4o-mini Agent**: Intelligent analysis extracting titles, keywords, and summaries
+- ✅ **Audio Summaries CRUD**: Create, read, and delete audio summaries
+- ✅ **Multi-format Support**: MP3, WAV, M4A, OGG, WEBM, and more
+- ✅ **Secure Storage**: User-scoped audio summaries with authentication
+- ✅ **Spanish Language**: Optimized for Spanish transcription (configurable)
+
+**Implemented Routes:**
+
+**Audio (all protected):**
+- `POST /api/audio/analyze` - Upload and analyze audio file
+- `GET /api/audio` - List user's audio summaries
+- `GET /api/audio/:id` - Get specific audio summary
+- `DELETE /api/audio/:id` - Delete audio summary
+
+**Features:**
+- 🎙️ **Automatic Transcription**: Speech-to-text using Whisper
+- 🤖 **Intelligent Analysis**: AI agent extracts key insights
+- 📝 **Structured Output**: Title, keywords, transcript, and summary
+- 🔒 **Protected Endpoints**: User authentication required
+- 💾 **Database Storage**: All summaries stored with PostgreSQL
+
+**Documentation:** 📄 See [AUDIO_TRANSCRIPTION_GUIDE.md](./AUDIO_TRANSCRIPTION_GUIDE.md) for detailed usage instructions and API examples.
+
+**Success Criteria:** ✅ Audio transcription and analysis fully functional.
+
 **Implemented Routes:**
 
 **Plans (public):**
@@ -302,6 +337,7 @@ npm run db:studio    # Open Prisma Studio
 | `POSTGRES_PORT` | PostgreSQL port | `5432` |
 | `JWT_SECRET` | JWT secret key | `your-secret-key` |
 | `JWT_EXPIRES_IN` | JWT expiration time | `7d` |
+| `OPENAI_API_KEY` | OpenAI API key for Whisper & GPT | `sk-proj-...` |
 | `CORS_ORIGINS` | Allowed CORS origins (comma-separated) | `http://localhost:3000,http://localhost:5173` |
 
 ---

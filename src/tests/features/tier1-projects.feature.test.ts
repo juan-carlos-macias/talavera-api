@@ -5,7 +5,6 @@ import { App } from '@/app';
 const app = new App().app;
 
 let authToken: string;
-let userId: string;
 
 describe('Feature: Project Management (Tier 1)', () => {
   beforeEach(async () => {
